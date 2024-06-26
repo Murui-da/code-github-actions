@@ -1,0 +1,53 @@
+name: Build and Deploy Singularity Image
+
+on:
+  workflow_dispatch:
+    inputs:
+      outDir:
+        description: 'Output path for the image'
+        default: '~'
+        required: true
+        type: string
+      dockerhub-username:
+        description: 'Dockerhub username'
+        default: 'cuhkhaosun'
+        required: true
+        type: string
+      image-name:
+        description: 'Image name'
+        default: 'base'
+        required: true
+        type: string
+      image-tag:
+        description: 'Image tag'
+        default: 'latest'
+        required: true
+        type: string
+
+jobs:
+  build-singularity-image:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up environment
+        uses: eWaterCycle/setup-singularity@v7
+        with:
+          singularity-version: 3.8.3
+
+      - name: Pull Docker image and build Singularity image
+        run: |
+          singularity build ${{ inputs.image-name }}.sif docker://${{ inputs.dockerhub-username }}/${{ inputs.image-name }}:${{ inputs.image-tag }}
+
+      - name: Download Singularity image to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST_NGS }}
+          username: ${{ secrets.NGS_USERNAME }}
+          password: ${{ secrets.NGS_PASSWORD }}
+          port: 2013
+          source: ${{ inputs.image-name }}.sif
+          target: ${{ inputs.outDir }}
+          timeout: 120s
