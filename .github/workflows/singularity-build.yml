@@ -46,3 +46,4 @@ jobs:
         with:
           name: ${{ inputs.image-name }}
           path: ${{ inputs.image-name }}/*
+          compression-level: 0
