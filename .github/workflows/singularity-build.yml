@@ -34,6 +34,7 @@ jobs:
 
       - name: Pull Docker image and build Singularity image
         run: |
+          mkdir ${{ inputs.image-name }}
           singularity build ${{ inputs.image-name }}/${{ inputs.image-name }}.sif docker://${{ inputs.dockerhub-username }}/${{ inputs.image-name }}:${{ inputs.image-tag }}
 
       - uses: actions/upload-artifact@v4
