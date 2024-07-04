@@ -39,15 +39,9 @@ jobs:
 
       - name: Pull Docker image and build Singularity image
         run: |
-          singularity build ${{ inputs.image-name }}.sif docker://${{ inputs.dockerhub-username }}/${{ inputs.image-name }}:${{ inputs.image-tag }}
+          singularity build ${{ inputs.image-name }}/${{ inputs.image-name }}.sif docker://${{ inputs.dockerhub-username }}/${{ inputs.image-name }}:${{ inputs.image-tag }}
 
-      - name: Download Singularity image to server
-        uses: appleboy/scp-action@v0.1.7
+      - uses: actions/upload-artifact@v4
         with:
-          host: ${{ secrets.HOST_NGS }}
-          username: ${{ secrets.NGS_USERNAME }}
-          password: ${{ secrets.NGS_PASSWORD }}
-          port: 2013
-          source: ${{ inputs.image-name }}.sif
-          target: ${{ inputs.outDir }}
-          timeout: 120s
+          name: ${{ inputs.image-name }}
+          path: ${{ inputs.image-name }}
