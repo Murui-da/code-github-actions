@@ -3,11 +3,6 @@ name: Build and Deploy Singularity Image
 on:
   workflow_dispatch:
     inputs:
-      outDir:
-        description: 'Output path for the image'
-        default: '~'
-        required: true
-        type: string
       dockerhub-username:
         description: 'Dockerhub username'
         default: 'cuhkhaosun'
