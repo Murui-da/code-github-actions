@@ -36,14 +36,8 @@ jobs:
         run: |
           singularity build ${{ inputs.image-name }}.sif docker://${{ inputs.dockerhub-username }}/${{ inputs.image-name }}:${{ inputs.image-tag }}
 
-      - name: Zip and split image
-        run: |
-          zip ${{ inputs.image-name }}.zip ${{ inputs.image-name }}.sif
-          mkdir ${{ inputs.image-name }}
-          zip -s 200m ${{ inputs.image-name }}.zip --out ${{ inputs.image-name }}/${{ inputs.image-name }}.zip
-
       - uses: actions/upload-artifact@v4
         with:
-          name: ${{ inputs.image-name }}
-          path: ${{ inputs.image-name }}/*
+          name: ${{ inputs.image-name }}-image-file
+          path: ${{ inputs.image-name }}.sif
           compression-level: 0
