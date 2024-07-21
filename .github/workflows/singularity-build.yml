@@ -41,3 +41,14 @@ jobs:
           name: ${{ inputs.image-name }}-image-file
           path: ${{ inputs.image-name }}.sif
           compression-level: 0
+
+  download-to-server:
+    runs-on: sz
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.image-name }}-image-file
+          path: ~/${{ inputs.image-name }}
+      - name: Display structure of downloaded files
+        run: ls -R ~/${{ inputs.image-name }}
